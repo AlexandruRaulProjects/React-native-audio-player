@@ -34,8 +34,11 @@ const menuItems = [
 
 
 
-function MainScreen({ navigation }) {
+function MainScreen({ navigation, route }) {
 
+    function extractNumberOfAudios() {
+        return route.params.numberOfAudios;
+    }
 
     return <CustomLinearGradient>
         <View style={styles.container}>
@@ -58,7 +61,7 @@ function MainScreen({ navigation }) {
                                         <MaterialIcons name={menuItem.iconName} size={24} color="white" />
                                     </View>
                                     <Text style={styles.menuItem}>{menuItem.title}</Text>
-                                    {menuItem.title === ' Audio Books' && <Text style={styles.numberOfBooks}>32</Text>}
+                                    {menuItem.title === ' Audio Books' && <Text style={styles.numberOfBooks}>{extractNumberOfAudios()}</Text>}
                                 </View>
                             </Pressable>
                         )

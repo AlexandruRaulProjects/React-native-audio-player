@@ -12,10 +12,12 @@ function MyAudioBooks({ navigation }) {
 
 
     function pressHandler() {
-        navigation.navigate('Menu');
+        navigation.navigate('Menu', {
+            numberOfAudios: AUDIOS.length,
+        });
     }
 
-    return<CustomLinearGradient>
+    return <CustomLinearGradient>
         <View style={styles.containerSS}>
             <Text style={styles.titleSS}>Audio Books</Text>
             <FlatList

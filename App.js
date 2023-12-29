@@ -11,7 +11,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Menu'>
+      <Stack.Navigator initialRouteName='Audios'>
         <Stack.Screen name="Audios" component={MyAudioBooks} />
         <Stack.Screen name="Menu" component={MainScreen} />
       </Stack.Navigator>

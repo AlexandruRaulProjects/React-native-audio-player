@@ -1,12 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
 import Checkbox from 'expo-checkbox';
-import { LinearGradient } from 'expo-linear-gradient';
+
+import CustomLinearGradient from '../components/CustomLinearGradient';
 
 function SignUp() {
-    return <LinearGradient
-        style={styles.rootSS}
-        colors={['rgba(121,9,105,1)', 'rgba(117,29,124,1)']}
+    return <CustomLinearGradient
     >
         <Text style={styles.pageTitleSS}>Sign up</Text>
         <View>
@@ -28,7 +27,7 @@ function SignUp() {
             </Pressable>
         </View>
         <StatusBar style="auto" />
-    </LinearGradient>
+    </CustomLinearGradient>
 }
 
 const styles = StyleSheet.create({
