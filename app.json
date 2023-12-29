@@ -9,7 +9,10 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "fonts": [
+        "./assets/Manrope/Manrope-VariableFont_wght.ttf"
+      ]
     },
     "assetBundlePatterns": [
       "**/*"
