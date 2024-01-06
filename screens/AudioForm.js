@@ -43,10 +43,10 @@ function AudioForm({ navigation }) {
     let formIsValid;
 
     async function sendValidatedInputs(audioData) {
-        const nameIsValid = expenseData.name.length > 1;
-        const imageIsValid = expenseData.image.length > 1;
-        const authorIsValid = expenseData.author.length > 3;
-        const readIsValid = expenseData.read.length > 10;
+        const nameIsValid = audioData.name.length > 1;
+        const imageIsValid = audioData.image.length > 1;
+        const authorIsValid = audioData.author.length > 3;
+        const readIsValid = audioData.read.length > 10;
 
         formIsValid = nameIsValid && imageIsValid && authorIsValid && readIsValid;
 

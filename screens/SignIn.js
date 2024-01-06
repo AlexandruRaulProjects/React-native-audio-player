@@ -19,14 +19,6 @@ function SignIn({ navigation }) {
         },
     });
 
-    function signInHandler() {
-        //TODO: Sign In implementation
-    }
-
-    function signUpHandler() {
-        navigation.navigate('SignUp');
-    }
-
     function inputChangeHandler(inputIdentifier, enteredValue) {
         setInputs((currentInputs) => {
             return {
@@ -34,6 +26,43 @@ function SignIn({ navigation }) {
                 [inputIdentifier]: { value: enteredValue, isValid: true }
             }
         });
+    }
+
+    async function sendValidatedInputs(signInData) {
+        const usernameIsValid = expenseData.username.length > 1;
+        const passwordIsValid = expenseData.read.length > 10;
+
+        formIsValid = usernameIsValid && passwordIsValid;
+
+        if (!formIsValid) {
+            //TODO: show some feedback
+            //Alert.alert('Invalid input!', 'Please check your input values!');
+            setInputs((currentInputs) => {
+                return {
+                    username: { value: currentInputs.username.value, isValid: usernameIsValid },
+                    password: { value: currentInputs.password.value, isValid: passwordIsValid },
+                };
+            });
+        }
+        if (formIsValid) {
+
+            // navigation.navigate("Menu");
+            // const id = await storeAudio(audioData);
+            // audioCtx.addAudio({...audioData, id: id});
+        }
+    }
+
+    function signInHandler() {
+        const signInData = {
+            username: inputs.username.value,
+            password: inputs.password.value,
+        }
+
+        //TODO: Sign In implementation
+    }
+
+    function signUpHandler() {
+        navigation.navigate('SignUp');
     }
 
     return <CustomLinearGradient style={styles.gradient}>
@@ -54,7 +83,7 @@ function SignIn({ navigation }) {
                 textInputConfig={{
                     onChangeText: inputChangeHandler.bind(this, 'password'),
                     value: inputs.password.value,
-                    textContentType: 'password',
+                    secureTextEntry: true,
                 }}
             />
             <Text style={styles.forgotPassword}>Forgot password?</Text>
