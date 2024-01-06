@@ -4,10 +4,10 @@ import { LinearGradient } from "expo-linear-gradient";
 
 
 
-function CustomLinearGradient({ children }) {
+function CustomLinearGradient({ children, style }) {
 
     return <LinearGradient
-        style={styles.rootSS}
+        style={[styles.rootSS, style]}
         colors={['rgba(121,9,105,1)', 'rgba(117,29,124,1)']}
     >
         {children}

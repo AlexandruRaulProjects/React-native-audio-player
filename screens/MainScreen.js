@@ -1,15 +1,17 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { useContext} from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
+import { AUDIOS } from '../data/dummy-data';
 
-import { USERS, AUDIOS_NUMBER } from '../data/dummy-data';
 import CustomLinearGradient from '../components/CustomLinearGradient';
 import CustomButton from '../components/CustomButton';
+import { NumberContext } from '../context/number-of-audios-context';
 
 const menuItems = [
     {
         iconName: 'history',
         title: ' History',
-        navigateTo: ''
+        navigateTo: 'LastPlayed'
     },
 
     {
@@ -21,7 +23,7 @@ const menuItems = [
     {
         iconName: 'add-circle',
         title: ' Add new audio book',
-        navigateTo: ''
+        navigateTo: 'AudioForm'
     },
 
     {
@@ -34,10 +36,17 @@ const menuItems = [
 
 
 
-function MainScreen({ navigation, route }) {
+function MainScreen({ navigation }) {
+
+    const audiosNumberContext = useContext(NumberContext);
+    
 
     function extractNumberOfAudios() {
-        return route.params.numberOfAudios;
+        return audiosNumberContext.numberOfAudios = AUDIOS.length;
+    }
+
+    function goToScreenHandler(screenName) {
+        navigation.navigate(screenName);
     }
 
     return <CustomLinearGradient>
@@ -55,7 +64,7 @@ function MainScreen({ navigation, route }) {
                 <View style={styles.menuOptions}>
                     {
                         menuItems.map((menuItem) =>
-                            <Pressable key={menuItem.title} onPress={() => navigation.navigate(menuItem.navigateTo)} android_ripple={{ color: 'rgba(117,29,124,0.2)' }}>
+                            <Pressable key={menuItem.title} onPress={goToScreenHandler.bind(this, menuItem.navigateTo)} android_ripple={{ color: 'rgba(117,29,124,0.2)' }}>
                                 <View style={styles.menuItem}>
                                     <View>
                                         <MaterialIcons name={menuItem.iconName} size={24} color="white" />
@@ -65,7 +74,6 @@ function MainScreen({ navigation, route }) {
                                 </View>
                             </Pressable>
                         )
-
                     }
                 </View>
             </View>
@@ -133,8 +141,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 6,
         paddingVertical: 2,
     },
-
-
 });
 
 export default MainScreen; 

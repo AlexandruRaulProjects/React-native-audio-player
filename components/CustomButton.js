@@ -2,14 +2,14 @@ import { View, StyleSheet, Text, Pressable } from 'react-native';
 
 import { AntDesign } from '@expo/vector-icons';
 
-function CustomButton({ iconName, buttonText, onPress }) {
-    return <View style={styles.button}>
+function CustomButton({ iconName, buttonText, onPress, buttonTextStyle, buttonStyle }) {
+    return <View style={[styles.button, buttonStyle]}>
         <Pressable onPress={onPress} android_ripple={{ color: 'rgba(117,29,124,0.2)' }}>
             <View style={styles.buttonText}>
                 <Text>
                     <View style={styles.flexRowSS}>
-                        <AntDesign name={iconName} size={16} color="rgba(117,29,124,1)" />
-                        <Text style={styles.buttonTextSS}> {buttonText}</Text>
+                        {iconName !== null && <AntDesign name={iconName} size={16} color="rgba(117,29,124,1)" />}
+                        <Text style={[styles.buttonTextSS, buttonTextStyle]}> {buttonText}</Text>
                     </View>
                 </Text>
             </View>
@@ -24,8 +24,9 @@ const styles = StyleSheet.create({
         borderRadius: 6,
     },
     buttonText: {
-        paddingHorizontal: 96,
+        paddingHorizontal: 48,
         paddingVertical: 12,
+        fontWeight: 600,
     },
     buttonTextSS: {
         color: "rgba(117,29,124,1)",
