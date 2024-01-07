@@ -7,6 +7,7 @@ import CustomButton from '../components/CustomButton';
 import Input from '../components/Input';
 import { storeAudio } from '../utils/http';
 import { AudiosContext } from '../context/audios-context';
+import { AuthContext } from '../context/auth-context';
 
 function AudioForm({ navigation }) {
 
@@ -30,6 +31,7 @@ function AudioForm({ navigation }) {
     });
 
     const audioCtx = useContext(AudiosContext);
+    const authCtx = useContext(AuthContext);
 
     function inputChangeHandler(inputIdentifier, enteredValue) {
         setInputs((currentInputs) => {
@@ -65,8 +67,8 @@ function AudioForm({ navigation }) {
         if (formIsValid) {
 
             navigation.navigate("Menu");
-            const id = await storeAudio(audioData);
-            audioCtx.addAudio({...audioData, id: id});
+            const id = await storeAudio(audioData, authCtx.token);
+            audioCtx.addAudio({ ...audioData, id: id });
         }
     }
 

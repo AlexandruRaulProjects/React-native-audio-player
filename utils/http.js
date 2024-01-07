@@ -2,22 +2,28 @@ import axios from 'axios';
 
 const FIREBASE_URL = 'https://audiobook-react-native-default-rtdb.europe-west1.firebasedatabase.app';
 
-export async function storeAudio(expenseData) {
+export async function storeAudio(audioData, authToken) {
     const response = await axios.post(
-        FIREBASE_URL + '/audios.json',
-        expenseData
+        FIREBASE_URL
+        + '/audios.json?auth='
+        + authToken,
+        audioData
     );
     const id = response.data.name;
+    console.log(response.data);
     return id;
 }
 
-export async function fetchAudios() {
-    const response = await axios.get(FIREBASE_URL + '/audios.json');
+export async function fetchAudios(authToken) {
+    const response = await axios.get(FIREBASE_URL
+        + '/audios.json?auth='
+        + authToken
+    );
 
-    const expenses = [];
+    const audios = [];
 
     for (const key in response.data) {
-        const expenseObj = {
+        const audioObj = {
             id: key,
             name: response.data[key].name,
             image: response.data[key].image,
@@ -25,10 +31,10 @@ export async function fetchAudios() {
             textContent: response.data[key].textContent,
         }
 
-        expenses.push(expenseObj);
+        audios.push(audioObj);
     }
 
-    return expenses;
+    return audios;
 }
 
 /*

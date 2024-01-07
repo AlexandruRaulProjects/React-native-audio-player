@@ -1,15 +1,18 @@
-import { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { Text, View, StyleSheet, Alert } from 'react-native';
+import { useState, useContext } from 'react';
 
 import CustomLinearGradient from '../components/CustomLinearGradient';
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
+import LoadingOverlay from '../components/LoadingOverlay';
+import { login } from '../utils/auth';
+import { AuthContext } from '../context/auth-context';
 
 function SignIn({ navigation }) {
 
     const [inputs, setInputs] = useState({
-        username: {
+        email: {
             value: '',
             isValid: true,
         },
@@ -18,6 +21,10 @@ function SignIn({ navigation }) {
             isValid: true,
         },
     });
+
+    const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+    const authCtx = useContext(AuthContext);
 
     function inputChangeHandler(inputIdentifier, enteredValue) {
         setInputs((currentInputs) => {
@@ -29,35 +36,43 @@ function SignIn({ navigation }) {
     }
 
     async function sendValidatedInputs(signInData) {
-        const usernameIsValid = expenseData.username.length > 1;
-        const passwordIsValid = expenseData.read.length > 10;
+        const emailIsValid = signInData.email.length > 1;
+        const passwordIsValid = signInData.password.length > 6;
 
-        formIsValid = usernameIsValid && passwordIsValid;
+        formIsValid = emailIsValid && passwordIsValid;
 
         if (!formIsValid) {
             //TODO: show some feedback
             //Alert.alert('Invalid input!', 'Please check your input values!');
             setInputs((currentInputs) => {
                 return {
-                    username: { value: currentInputs.username.value, isValid: usernameIsValid },
+                    email: { value: currentInputs.email.value, isValid: emailIsValid },
                     password: { value: currentInputs.password.value, isValid: passwordIsValid },
                 };
             });
         }
         if (formIsValid) {
 
-            // navigation.navigate("Menu");
-            // const id = await storeAudio(audioData);
-            // audioCtx.addAudio({...audioData, id: id});
+            setIsAuthenticating(true);
+            try {
+                const token = await login(signInData.email, signInData.password);
+                authCtx.authenticate(token);
+                console.log(authCtx.isAuthenticated)
+            } catch (error) {
+                Alert.alert('Authentication failed!', 'Could not log you in. Check you credentials or come back later!');
+            }
+
+            setIsAuthenticating(false);
         }
     }
 
     function signInHandler() {
         const signInData = {
-            username: inputs.username.value,
+            email: inputs.email.value,
             password: inputs.password.value,
         }
 
+        sendValidatedInputs(signInData);
         //TODO: Sign In implementation
     }
 
@@ -65,16 +80,20 @@ function SignIn({ navigation }) {
         navigation.navigate('SignUp');
     }
 
+    if (isAuthenticating) {
+        return <LoadingOverlay message={"Logging in user..."} />
+    }
+
     return <CustomLinearGradient style={styles.gradient}>
         <Text style={styles.title}>APP TITLE</Text>
         <Feather style={styles.logo} name="book" size={48} color="#F1F1F1" />
         <View style={styles.inputsV}>
             <Input
-                label='Username'
-                invalid={!inputs.username.isValid}
+                label='Email'
+                invalid={!inputs.email.isValid}
                 textInputConfig={{
-                    onChangeText: inputChangeHandler.bind(this, 'username'),
-                    value: inputs.username.value
+                    onChangeText: inputChangeHandler.bind(this, 'email'),
+                    value: inputs.email.value
                 }}
             />
             <Input

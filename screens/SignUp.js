@@ -1,11 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 
 import CustomLinearGradient from '../components/CustomLinearGradient';
 import CustomButton from '../components/CustomButton';
 import Input from '../components/Input';
+import { createUser } from '../utils/auth';
+import LoadingOverlay from '../components/LoadingOverlay';
+import { AuthContext } from '../context/auth-context';
 
 function SignUp({ navigation }) {
 
@@ -28,6 +31,10 @@ function SignUp({ navigation }) {
         }
     });
 
+    const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+    const authCtx = useContext(AuthContext);
+
     function inputChangeHandler(inputIdentifier, enteredValue) {
         setInputs((currentInputs) => {
             return {
@@ -38,10 +45,10 @@ function SignUp({ navigation }) {
     }
 
     async function sendValidatedInputs(signUpData) {
-        const usernameIsValid = signUpData.username.length > 1;
-        const fullnameIsValid = signUpData.fullname.length > 10;
-        const emailIsValid = signUpData.email.length > 10;
-        const passwordIsValid = signUpData.password.length > 10;
+        const usernameIsValid = signUpData.username.length > 4;
+        const fullnameIsValid = signUpData.fullname.length > 4;
+        const emailIsValid = signUpData.email.includes('@');
+        const passwordIsValid = signUpData.password.length > 6;
 
         formIsValid = usernameIsValid && fullnameIsValid && emailIsValid && passwordIsValid;
 
@@ -58,10 +65,15 @@ function SignUp({ navigation }) {
             });
         }
         if (formIsValid) {
-
-            // navigation.navigate("Menu");
-            // const id = await storeAudio(audioData);
-            // audioCtx.addAudio({...audioData, id: id});
+            setIsAuthenticating(true);
+            try {
+                const token = await createUser(signUpData.email, signUpData.password);
+                authCtx.authenticate(token);
+            }
+            catch (error) {
+                Alert.alert('Authentication failed!', 'Could not create a new user. Check your inputs or come back later!');
+            }
+            setIsAuthenticating(false);
         }
     }
 
@@ -74,6 +86,7 @@ function SignUp({ navigation }) {
             password: inputs.password.value,
         }
 
+        sendValidatedInputs(signUpData);
         //TODO: Sign Up implementation
     }
 
@@ -81,10 +94,14 @@ function SignUp({ navigation }) {
         navigation.navigate('SignIn');
     }
 
+    if (isAuthenticating) {
+        return <LoadingOverlay message={"Creating user..."} />
+    }
+
     return <CustomLinearGradient
     >
         <Text style={styles.pageTitleSS}>Create An Account</Text>
-        <View style={styles.inputsV}>
+        <View>
             <Input
                 label='Username'
                 invalid={!inputs.username.isValid}
@@ -103,11 +120,11 @@ function SignUp({ navigation }) {
             />
             <Input
                 label='email'
-                invalid={!inputs.password.isValid}
+                invalid={!inputs.email.isValid}
                 textInputConfig={{
                     onChangeText: inputChangeHandler.bind(this, 'email'),
-                    value: inputs.password.value,
-                    textContentType: 'email',
+                    value: inputs.email.value,
+                    textContentType: 'emailAddress',
                 }}
             />
             <Input

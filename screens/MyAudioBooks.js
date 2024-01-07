@@ -10,6 +10,7 @@ import CustomLinearGradient from '../components/CustomLinearGradient';
 import { AudiosContext } from '../context/audios-context';
 import LoadingOverlay from '../components/LoadingOverlay';
 import ErrorLoadingOverlay from '../components/ErrorOverlay';
+import { AuthContext } from '../context/auth-context';
 
 function renderAudioItem(itemData) {
     return <AudioGridTile name={itemData.item.name} image={itemData.item.image} author={itemData.item.author} textContent={itemData.item.content} />;
@@ -22,12 +23,13 @@ function MyAudioBooks({ navigation }) {
     const [error, setError] = useState();
 
     const audiosCtx = useContext(AudiosContext);
+    const authCtx = useContext(AuthContext);
 
     useEffect(() => {
         async function getAudios() {
             setIsFetching(true);
             try {
-                const audios = await fetchAudios();
+                const audios = await fetchAudios(authCtx.token);
                 audiosCtx.setAudios(audios);
                 setFetchedAudios(audios);
             } catch (error) {

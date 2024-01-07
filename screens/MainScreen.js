@@ -6,6 +6,7 @@ import { AUDIOS } from '../data/dummy-data';
 import CustomLinearGradient from '../components/CustomLinearGradient';
 import CustomButton from '../components/CustomButton';
 import { NumberContext } from '../context/number-of-audios-context';
+import { AuthContext } from '../context/auth-context';
 
 const menuItems = [
     {
@@ -39,6 +40,7 @@ const menuItems = [
 function MainScreen({ navigation }) {
 
     const audiosNumberContext = useContext(NumberContext);
+    const authCtx = useContext(AuthContext);
     
 
     function extractNumberOfAudios() {
@@ -47,6 +49,10 @@ function MainScreen({ navigation }) {
 
     function goToScreenHandler(screenName) {
         navigation.navigate(screenName);
+    }
+
+    function logoutHandler(){
+        authCtx.logout();
     }
 
     return <CustomLinearGradient>
@@ -81,6 +87,7 @@ function MainScreen({ navigation }) {
             <CustomButton
                 iconName="logout"
                 buttonText=' Logout'
+                onPress={logoutHandler}
             />
 
         </View>
