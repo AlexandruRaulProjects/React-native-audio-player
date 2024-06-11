@@ -1,29 +1,21 @@
-import { useState } from "react";
 import {
-  Button,
-  View,
   StyleSheet,
   Text,
   SafeAreaView,
   TouchableOpacity,
   Alert,
-  Image,
 } from "react-native";
-import OpenAI from "openai";
-import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
-import { PDFDocument } from "pdf-lib";
 import { storage } from "../db/firebase";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import axios from "axios";
 
-function CustomFileUpload() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
-
-  const openai = new OpenAI({
-    apiKey: "openai-api-key",
-  });
-
+function CustomFileUpload({
+  selectedFile,
+  setSelectedFile,
+  uploading,
+  setUploading,
+}) {
   const pickDocument = async () => {
     try {
       const res = await DocumentPicker.getDocumentAsync({
@@ -63,35 +55,36 @@ function CustomFileUpload() {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             //LINE C
             console.log("File available at", downloadURL);
-            isUploadCompleted(true);
             return downloadURL;
           });
         }
       );
-      console.log(selectedFile.assets[0].uri);
-      const fileContent = await FileSystem.readAsStringAsync(
-        selectedFile.assets[0].uri,
-        {
-          encoding: FileSystem.EncodingType.Base64,
-        }
-      );
+      console.log(selectedFile.assets[0]);
 
-      const pdfDoc = await PDFDocument.load(fileContent);
+      const fileDetails = {
+        mimeType: selectedFile.assets[0].mimeType,
+        name: selectedFile.assets[0].name,
+        size: selectedFile.assets[0].size,
+        uri: selectedFile.assets[0].uri,
+      };
 
-      const completion = await openai.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content: `Provide a summary of maximum 200 words about the content of this file.`,
-          },
-        ],
-        model: "gpt-3.5-turbo",
+      // Notify backend to finalize the processing
+      // const response = await axios.post(
+      //   "file-reader-app-1dp6.vercel.app/finalize",
+      //   {
+      //     fileDetails: fileDetails,
+      //   }
+      // );
+
+      const response = await axios.post("http://192.168.0.104:3005/finalize", {
+        fileDetails: fileDetails,
       });
 
-      console.log(completion.choices[0]);
+      console.log(response.data);
+
+      Alert.alert("Response from server:", "OK");
 
       setUploading(false);
-      Alert.alert("File uploaded", "Your file has been uploaded successfully!");
       setSelectedFile(null);
     } catch (e) {
       console.error(e);
@@ -106,7 +99,9 @@ function CustomFileUpload() {
   return (
     <SafeAreaView>
       <TouchableOpacity style={styles.selectButton} onPress={pickDocument}>
-        <Text style={styles.buttonText}>Upload a file</Text>
+        <Text style={styles.buttonText}>
+          {selectedFile ? "File Loaded" : "Load a file"}
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={selectedFile ? styles.uploadButton : styles.disabledButton}
@@ -117,6 +112,7 @@ function CustomFileUpload() {
           {uploading ? "Uploading..." : "Upload"}
         </Text>
       </TouchableOpacity>
+      {uploading && <Text style={styles.generatedText}>Generating...</Text>}
     </SafeAreaView>
   );
 }
@@ -139,6 +135,16 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     textAlign: "center",
+  },
+  generatedText: {
+    textAlign: "center",
+    color: "rgba(117,29,124,1)",
+    backgroundColor: "yellow",
+    padding: 1,
+    borderRadius: 3,
+    borderColor: "black",
+    borderStyle: "solid",
+    marginTop: 6,
   },
   uploadButton: {
     backgroundColor: "rgba(87,29,124,0.5)",

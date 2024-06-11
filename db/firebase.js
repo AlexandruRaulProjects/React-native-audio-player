@@ -2,11 +2,9 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-import Config from "react-native-config";
+import dotenv from "dotenv";
 
-const firebaseConfig = {
-  
-};
+const firebaseConfig = {};
 
 // Initialize Firebase and export the app instance
 export const app = initializeApp(firebaseConfig);
