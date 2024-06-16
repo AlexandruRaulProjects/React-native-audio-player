@@ -7,9 +7,12 @@ import CustomButton from "../components/CustomButton";
 import CustomFileUpload from "../components/CustomFileUpload";
 
 import Input from "../components/Input";
-import { storeAudio } from "../utils/http";
-import { AudiosContext } from "../context/audios-context";
 import { AuthContext } from "../context/auth-context";
+
+import { db } from "../db/firebase";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+
+import uuid from "react-native-uuid";
 
 function AudioForm({ navigation }) {
   const [inputs, setInputs] = useState({
@@ -23,12 +26,27 @@ function AudioForm({ navigation }) {
     },
   });
 
-  const audioCtx = useContext(AudiosContext);
   const authCtx = useContext(AuthContext);
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [audio, setAudio] = useState(null);
 
+  const updateAudiosDb = async (audioData, id) => {
+    console.log(audioData);
+
+    try {
+      const audiosRef = doc(db, `profiles`, id);
+
+      const u = uuid.v4();
+
+      await updateDoc(audiosRef, {
+        audios: arrayUnion({ ...audioData, id: u }),
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   function inputChangeHandler(inputIdentifier, enteredValue) {
     setInputs((currentInputs) => {
@@ -42,12 +60,14 @@ function AudioForm({ navigation }) {
   let formIsValid;
 
   async function sendValidatedInputs(audioData) {
+    audioData = { ...audioData, ...audio };
+    console.log(audioData);
+
     const nameIsValid = audioData.name.length > 1;
     const authorIsValid = audioData.author.length > 3;
-    formIsValid = nameIsValid && authorIsValid && selectedFile;
+    formIsValid = nameIsValid && authorIsValid;
 
     if (!formIsValid) {
-      //TODO: show some feedback
       Alert.alert("Invalid input!", "Please check your input values!");
       setInputs((currentInputs) => {
         return {
@@ -58,8 +78,8 @@ function AudioForm({ navigation }) {
     }
     if (formIsValid) {
       navigation.navigate("Menu");
-      const id = await storeAudio(audioData, authCtx.token);
-      audioCtx.addAudio({ ...audioData, id: id });
+      const id = authCtx.getProfile()["id"];
+      await updateAudiosDb(audioData, id);
     }
   }
 
@@ -101,6 +121,8 @@ function AudioForm({ navigation }) {
 
       <View>
         <CustomFileUpload
+          audio={audio}
+          setAudio={setAudio}
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}
           uploading={uploading}

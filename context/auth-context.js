@@ -1,50 +1,65 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 
 export const AuthContext = createContext({
-    token: '',
-    isAuthenticated: false,
-    authenticate: () => { },
-    logout: () => { },
+  token: "",
+  isAuthenticated: false,
+  redefineProfile: () => {},
+  getProfile: () => {},
+  authenticate: () => {},
+  logout: () => {},
 });
 
 function AuthContextProvider({ children }) {
+  const [authToken, setAuthToken] = useState();
+  const [profile, setProfile] = useState();
 
-    const [authToken, setAuthToken] = useState();
+  authCtx = useContext(AuthContext);
 
-    useEffect(() => {
-        async function fetchToken() {
+  useEffect(() => {
+    async function fetchToken() {
+      const storedToken = AsyncStorage.getItem("token");
 
-            const storedToken = AsyncStorage.getItem('token');
-
-            if (storedToken) {
-                authCtx.authenticate(storedToken);
-            }
-        }
-
-        fetchToken();
-    }, []);
-
-
-    function authenticate(token) {
-        setAuthToken(token);
-        AsyncStorage.setItem('token', token);
+      if (storedToken) {
+        authCtx.authenticate(storedToken);
+      }
     }
 
-    function logout() {
-        setAuthToken(null);
-        AsyncStorage.removeItem('token');
-    }
+    fetchToken();
+  }, []);
 
-    const value = {
-        token: authToken,
-        isAuthenticated: !!authToken,
-        authenticate: authenticate,
-        logout: logout,
-    };
+  function authenticate(token, profile) {
+    setAuthToken(token);
+    setProfile(profile);
+    AsyncStorage.setItem("token", token);
+  }
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  function getProfile() {
+    return profile;
+  }
+
+  function redefineProfile(profileAudios, profileAdditionalSettings) {
+    setProfile({ ...profile, ...profileAudios, ...profileAdditionalSettings });
+  }
+
+  function logout() {
+    setAuthToken(null);
+    setProfile({});
+    AsyncStorage.removeItem("token");
+  }
+
+  const value = {
+    token: authToken,
+    isAuthenticated: !!authToken,
+    getProfile: getProfile,
+    redefineProfile: redefineProfile,
+    profile: profile,
+    authenticate: authenticate,
+    logout: logout,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export default AuthContextProvider;

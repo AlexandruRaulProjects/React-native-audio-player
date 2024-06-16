@@ -16,6 +16,7 @@ import AudiosContextProvider from "./context/audios-context";
 import AuthContextProvider, { AuthContext } from "./context/auth-context";
 
 import { useContext } from "react";
+import Play from "./screens/Play";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,7 +35,13 @@ export default function App() {
   function AuthenticationStack() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="SignIn">
+        <Stack.Navigator
+          initialRouteName="SignIn"
+          screenOptions={{
+            headerShown: false,
+            animationEnabled: true, // Enable default animations
+          }}
+        >
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="SignUp" component={SignUp} />
         </Stack.Navigator>
@@ -47,10 +54,17 @@ export default function App() {
         <LastAudiosContextProvider>
           <NumberContextProvider>
             <NavigationContainer>
-              <Stack.Navigator initialRouteName="AudioForm">
+              <Stack.Navigator
+                initialRouteName="AudioForm"
+                screenOptions={{
+                  headerShown: false,
+                  animationEnabled: true, // Enable default animations
+                }}
+              >
                 <Stack.Screen name="Audios" component={MyAudioBooks} />
                 <Stack.Screen name="Menu" component={MainScreen} />
                 <Stack.Screen name="LastPlayed" component={LastPlayedAudios} />
+                <Stack.Screen name="Player" component={Play} />
                 <Stack.Screen name="AudioForm" component={AudioForm} />
                 {/* <Stack.Screen name="VoiceSettings" component={VoiceSettings} /> */}
                 <Stack.Screen name="Generate" component={Generate} />

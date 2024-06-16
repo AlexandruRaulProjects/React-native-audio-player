@@ -1,5 +1,12 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import { useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import { useContext, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AUDIOS } from "../data/dummy-data";
 
@@ -44,6 +51,9 @@ function MainScreen({ navigation }) {
   const audiosNumberContext = useContext(NumberContext);
   const authCtx = useContext(AuthContext);
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
   function extractNumberOfAudios() {
     return (audiosNumberContext.numberOfAudios = AUDIOS.length);
   }
@@ -60,13 +70,27 @@ function MainScreen({ navigation }) {
     <CustomLinearGradient>
       <View style={styles.container}>
         <Text style={styles.title}>Profile</Text>
-        <View style={styles.profileBox}>
-          <Text style={styles.image}>Image</Text>
-          <View style={styles.profileTexts}>
-            <Text style={styles.fullName}>Jenny Wilson</Text>
-            <Text style={styles.email}>jenny.wilson@gmail.com</Text>
+
+        <View style={styles.outlineProfileBox}>
+          <View style={styles.profileBox}>
+            <Image
+              source={{ uri: authCtx.getProfile()["image"] }}
+              style={styles.image}
+              onLoadEnd={() => setLoading(false)}
+              onError={() => {
+                setLoading(false);
+                setError(true);
+              }}
+            />
+            <View style={styles.profileTexts}>
+              <Text style={styles.fullName}>
+                {authCtx.getProfile()["fullname"]}
+              </Text>
+              <Text style={styles.email}>{authCtx.getProfile()["email"]}</Text>
+            </View>
           </View>
         </View>
+
         <View style={styles.menu}>
           <Text style={styles.menuTitle}>Menu</Text>
           <View style={styles.menuOptions}>
@@ -116,12 +140,24 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "500",
     color: "#F1F1F1",
+    marginTop: 40,
+  },
+  outlineProfileBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "#F1F1F1",
+    borderWidth: 4,
+    borderRadius: 8,
+    padding: 0,
   },
   profileBox: {
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: 16,
-    marginVertical: 16,
+    borderWidth: 4,
+    borderColor: "#f0e68c",
+    borderRadius: 2,
+    paddingHorizontal: 32,
+    paddingVertical: 12,
   },
   image: {
     marginRight: 48,
@@ -159,6 +195,15 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: 6,
     paddingVertical: 2,
+  },
+  image: {
+    width: 75,
+    height: 75,
+    resizeMode: "cover",
+    borderRadius: 40,
+    marginRight: 12,
+    borderColor: "white",
+    borderWidth: 2,
   },
 });
 

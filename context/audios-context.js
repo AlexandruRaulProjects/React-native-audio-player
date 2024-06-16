@@ -3,7 +3,7 @@ import { createContext, useReducer } from 'react';
 export const AudiosContext = createContext({
     audios: [],
     setAudios: (audios) => { },
-    addAudio: ({ name, image, author, read }) => { },
+    addAudio: ({ name, author, read, play }) => { },
 });
 
 function audiosReducer(state, action) {

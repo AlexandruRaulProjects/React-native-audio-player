@@ -11,6 +11,8 @@ import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import axios from "axios";
 
 function CustomFileUpload({
+  audio,
+  setAudio,
   selectedFile,
   setSelectedFile,
   uploading,
@@ -76,11 +78,18 @@ function CustomFileUpload({
       //   }
       // );
 
-      const response = await axios.post("http://192.168.0.104:3005/finalize", {
-        fileDetails: fileDetails,
-      });
-
-      console.log(response.data);
+      axios
+        .post("http://192.168.0.104:3005/finalize", {
+          fileDetails: fileDetails,
+        })
+        .then((response) => {
+          setAudio(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+  
 
       Alert.alert("Response from server:", "OK");
 
@@ -109,7 +118,7 @@ function CustomFileUpload({
         disabled={!selectedFile || uploading}
       >
         <Text style={styles.buttonText}>
-          {uploading ? "Uploading..." : "Upload"}
+          {selectedFile ? "Uploading..." : "Upload"}
         </Text>
       </TouchableOpacity>
       {uploading && <Text style={styles.generatedText}>Generating...</Text>}
