@@ -39,8 +39,10 @@ function AuthContextProvider({ children }) {
     return profile;
   }
 
-  function redefineProfile(profileAudios, profileAdditionalSettings) {
-    setProfile({ ...profile, ...profileAudios, ...profileAdditionalSettings });
+  function redefineProfile(settings) {
+    setProfile((currentProfile) => {
+      return { ...currentProfile, settings };
+    });
   }
 
   function logout() {

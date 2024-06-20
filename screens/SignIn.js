@@ -63,22 +63,16 @@ function SignIn({ navigation }) {
           signInData.email,
           signInData.password
         );
-        console.log(token);
         let docSnapshot;
 
         try {
           const docRef = doc(db, "profiles", userId);
 
-          console.log("Doc ref: ", docRef);
-
           docSnapshot = await getDoc(docRef);
-
-          console.log("Doc snapshot: ", docSnapshot);
 
           if (docSnapshot.exists()) {
             console.log("Document data:", docSnapshot.data());
           } else {
-            // docSnap.data() will be undefined in this case
             console.log("No such document!");
           }
         } catch (error) {
@@ -91,7 +85,6 @@ function SignIn({ navigation }) {
         let profile = docSnapshot.data();
 
         authCtx.authenticate(token, profile);
-        console.log(authCtx.isAuthenticated);
       } catch (error) {
         Alert.alert(
           "Authentication failed!",

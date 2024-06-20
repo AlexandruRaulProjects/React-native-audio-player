@@ -14,6 +14,8 @@ import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 import uuid from "react-native-uuid";
 
+import { FontAwesome } from "@expo/vector-icons";
+
 function AudioForm({ navigation }) {
   const [inputs, setInputs] = useState({
     name: {
@@ -33,8 +35,6 @@ function AudioForm({ navigation }) {
   const [audio, setAudio] = useState(null);
 
   const updateAudiosDb = async (audioData, id) => {
-    console.log(audioData);
-
     try {
       const audiosRef = doc(db, `profiles`, id);
 
@@ -61,7 +61,6 @@ function AudioForm({ navigation }) {
 
   async function sendValidatedInputs(audioData) {
     audioData = { ...audioData, ...audio };
-    console.log(audioData);
 
     const nameIsValid = audioData.name.length > 1;
     const authorIsValid = audioData.author.length > 3;
@@ -98,6 +97,12 @@ function AudioForm({ navigation }) {
 
   return (
     <CustomLinearGradient>
+      <FontAwesome
+        style={styles.audioFileIconSS}
+        name="file-audio-o"
+        size={64}
+        color="#F1F1F1"
+      />
       <Text style={styles.pageTitleSS}>Audio</Text>
       <View style={styles.inputsV}>
         <Input
@@ -185,6 +190,9 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignContent: "center",
+  },
+  audioFileIconSS: {
+    marginBottom: 48,
   },
 });
 

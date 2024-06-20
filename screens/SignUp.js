@@ -119,7 +119,6 @@ function SignUp({ navigation }) {
             (error) => console.log(error),
             async () => {
               const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-              console.log("File available at", downloadURL);
               setDownloadUrl(downloadURL);
 
               // Proceed with profile creation after download URL is obtained

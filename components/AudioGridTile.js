@@ -11,7 +11,6 @@ import { AuthContext } from "../context/auth-context";
 import { useNavigation } from "@react-navigation/native";
 
 function AudioGridTile({ author, id, mp3FileUri, name, processedFileURI }) {
-  const [isChecked, setChecked] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [sound, setSound] = useState();
@@ -72,13 +71,6 @@ function AudioGridTile({ author, id, mp3FileUri, name, processedFileURI }) {
     try {
       const audiosRef = doc(db, `profiles`, userId);
 
-      console.log("Restructured destructured audio: ", {
-        author,
-        id,
-        mp3FileUri,
-        name,
-        processedFileURI,
-      });
 
       await updateDoc(audiosRef, {
         audios: arrayRemove({ author, id, mp3FileUri, name, processedFileURI }),

@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { useContext, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { AUDIOS } from "../data/dummy-data";
 
 import CustomLinearGradient from "../components/CustomLinearGradient";
 import CustomButton from "../components/CustomButton";
@@ -19,7 +18,7 @@ const menuItems = [
   {
     iconName: "history",
     title: " History",
-    navigateTo: "LastPlayed",
+    navigateTo: "Menu",
   },
 
   {
@@ -37,7 +36,7 @@ const menuItems = [
   {
     iconName: "settings",
     title: " Voice Settings",
-    navigateTo: "VoiceSettings",
+    navigateTo: "Settings",
   },
 
   {
@@ -48,15 +47,10 @@ const menuItems = [
 ];
 
 function MainScreen({ navigation }) {
-  const audiosNumberContext = useContext(NumberContext);
   const authCtx = useContext(AuthContext);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
-  function extractNumberOfAudios() {
-    return (audiosNumberContext.numberOfAudios = AUDIOS.length);
-  }
 
   function goToScreenHandler(screenName) {
     navigation.navigate(screenName);
@@ -109,11 +103,11 @@ function MainScreen({ navigation }) {
                     />
                   </View>
                   <Text style={styles.menuItem}>{menuItem.title}</Text>
-                  {menuItem.title === " Audio Books" && (
+                  {/* {menuItem.title === " Audio Books" && (
                     <Text style={styles.numberOfBooks}>
-                      {extractNumberOfAudios()}
+                      {authCtx.getProfile()["audios"].length || 0}
                     </Text>
-                  )}
+                  )} */}
                 </View>
               </Pressable>
             ))}

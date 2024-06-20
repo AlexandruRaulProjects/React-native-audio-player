@@ -1,4 +1,3 @@
-import { AUDIOS } from "../data/dummy-data";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { useEffect, useState, useContext } from "react";
 
@@ -13,8 +12,9 @@ import { useNavigationSearch } from "../hooks/useNavigationSearch";
 import { db } from "../db/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 function renderAudioItem(itemData) {
-  console.log(itemData);
   return (
     <AudioGridTile
       author={itemData.item.author}
@@ -30,7 +30,6 @@ function MyAudioBooks({ navigation }) {
   const [fetchedAudios, setFetchedAudios] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [error, setError] = useState();
-  const [addedRecently, setAddedRecently] = useState(false);
 
   const authCtx = useContext(AuthContext);
 
@@ -42,18 +41,13 @@ function MyAudioBooks({ navigation }) {
 
   const fetchAudios = async (id) => {
     try {
-      console.log(id);
       const audiosRef = doc(db, "profiles", id);
-
-      console.log("Fetching audios.....");
-
       const audiosSnap = await getDoc(audiosRef);
 
       if (audiosSnap.exists()) {
         const audiosData = audiosSnap.data();
         return audiosData.audios;
       } else {
-        console.log("No such document!");
         return null;
       }
     } catch (error) {
@@ -79,9 +73,7 @@ function MyAudioBooks({ navigation }) {
   }, []);
 
   function pressHandler() {
-    navigation.navigate("Menu", {
-      numberOfAudios: AUDIOS.length,
-    });
+    navigation.navigate("Menu");
   }
 
   if (error && !isFetching) {
@@ -102,6 +94,12 @@ function MyAudioBooks({ navigation }) {
 
   return (
     <CustomLinearGradient>
+      <MaterialCommunityIcons
+        style={styles.booksshelfIcon}
+        name="bookshelf"
+        size={64}
+        color="#F1F1F1"
+      />
       <View style={styles.containerSS}>
         <Text style={styles.titleSS}>Audio Books</Text>
         <FlatList
@@ -136,7 +134,7 @@ const styles = StyleSheet.create({
     marginBottom: 48,
   },
   titleSS: {
-    marginTop: 48,
+    marginTop: 32,
     marginBottom: 48,
     fontSize: 32,
     color: "#F1F1F1",
@@ -148,6 +146,9 @@ const styles = StyleSheet.create({
   },
   audiosListSS: {
     marginBottom: 24,
+  },
+  booksshelfIcon: {
+    marginTop: 96,
   },
 });
 

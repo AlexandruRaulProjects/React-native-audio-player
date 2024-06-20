@@ -19,7 +19,6 @@ function CustomImageUpload({ selectedImage, setSelectedImage }) {
       });
 
       setSelectedImage(res.assets[0]);
-      console.log(res.assets[0]);
     } catch (err) {
       if (ImagePicker.isCancel(err)) {
         Alert.alert("Canceled");

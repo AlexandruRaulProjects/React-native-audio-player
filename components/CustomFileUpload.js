@@ -9,6 +9,8 @@ import * as DocumentPicker from "expo-document-picker";
 import { storage } from "../db/firebase";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../context/auth-context";
 
 function CustomFileUpload({
   audio,
@@ -18,13 +20,13 @@ function CustomFileUpload({
   uploading,
   setUploading,
 }) {
+  const authCtx = useContext(AuthContext);
+
   const pickDocument = async () => {
     try {
       const res = await DocumentPicker.getDocumentAsync({
         type: "*/*",
       });
-
-      console.log(res);
 
       setSelectedFile(res);
     } catch (err) {
@@ -55,13 +57,10 @@ function CustomFileUpload({
         (error) => console.log(error),
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            //LINE C
-            console.log("File available at", downloadURL);
             return downloadURL;
           });
         }
       );
-      console.log(selectedFile.assets[0]);
 
       const fileDetails = {
         mimeType: selectedFile.assets[0].mimeType,
@@ -69,6 +68,8 @@ function CustomFileUpload({
         size: selectedFile.assets[0].size,
         uri: selectedFile.assets[0].uri,
       };
+
+      const settings = authCtx.getProfile()["settings"];
 
       // Notify backend to finalize the processing
       // const response = await axios.post(
@@ -81,15 +82,14 @@ function CustomFileUpload({
       axios
         .post("http://192.168.0.104:3005/finalize", {
           fileDetails: fileDetails,
+          settings: settings,
         })
         .then((response) => {
           setAudio(response.data);
-          console.log(response.data);
         })
         .catch((error) => {
           console.error("There was an error!", error);
         });
-  
 
       Alert.alert("Response from server:", "OK");
 
