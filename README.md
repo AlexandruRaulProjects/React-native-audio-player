@@ -10,7 +10,7 @@ This is an Audiobook app for creating and playing personalized audios.
 2. Git: `https://git-scm.com/downloads`
 3. A smartphone with Android installed as OS
 4. Expo Go app from Play Store mobile application: `https://expo.dev/go?sdkVersion=51&platform=android&device=true`
-5. To access this project use any of these 2 identical projects from different remote repositories:  GitHub: `https://github.com/AlexandruRaulProjects/file-reader-app` or GitLab: `https://gitlab.upt.ro/alexandru.jula/file-reader-app.git`; follow these steps 
+5. To access `file-reader-app` use any of these 2 identical projects from different remote repositories:  GitHub: `https://github.com/AlexandruRaulProjects/file-reader-app` or GitLab: `https://gitlab.upt.ro/alexandru.jula/file-reader-app.git`; follow these steps 
 6. Firebase project configuration parameters
 
 ## To build and run this app:
