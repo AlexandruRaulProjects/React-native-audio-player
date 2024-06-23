@@ -6,12 +6,14 @@ This is an Audiobook app for creating and playing personalized audios.
 
 ## Prerequisites:
 
-### Nodejs: `https://nodejs.org/en`
-### Git: `https://git-scm.com/downloads`
-### A smartphone with Android installed as OS
-### Expo Go app from Play Store mobile application: `https://expo.dev/go?sdkVersion=51&platform=android&device=true`
-### To access this GitHub project: `https://github.com/AlexandruRaulProjects/file-reader-app` and follow these steps also
-### Firebase project configuration parameters
+1. Nodejs: `https://nodejs.org/en`
+2. Git: `https://git-scm.com/downloads`
+3. A smartphone with Android installed as OS
+4. Expo Go app from Play Store mobile application: `https://expo.dev/go?sdkVersion=51&platform=android&device=true`
+5. To access this GitHub project: `https://github.com/AlexandruRaulProjects/file-reader-app` and follow these steps 
+6. Firebase project configuration parameters
+
+## To build and run this app:
 
 1. Clone this repo
 `git clone <repo-link>`
