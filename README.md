@@ -4,11 +4,14 @@ This is an Audiobook app for creating and playing personalized audios.
 # How to run it
 ## In order to be sure it will work, follow these desribed **steps** bellow in this order, as well as for the **file-reader-app**
 
-## Prerequisites: a Nodejs version, a git version
+## Prerequisites:
+
 ### Nodejs: `https://nodejs.org/en`
 ### Git: `https://git-scm.com/downloads`
 ### A smartphone with Android installed as OS
 ### Expo Go app from Play Store mobile application: `https://expo.dev/go?sdkVersion=51&platform=android&device=true`
+### To access this GitHub project: `https://github.com/AlexandruRaulProjects/file-reader-app` and follow these steps also
+### Firebase project configuration parameters
 
 1. Clone this repo
 `git clone <repo-link>`
@@ -27,4 +30,4 @@ This is an Audiobook app for creating and playing personalized audios.
 
 7. Scan the QR code from the terminal, where the app is running 
 
-8. In order for it to work, access this GitHub project: `https://github.com/AlexandruRaulProjects/file-reader-app` and follow these steps also
+8. A `env.js` file which includes Firebase configuration keys, ... 
