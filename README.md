@@ -15,19 +15,19 @@ This is an Audiobook app for creating and playing personalized audios.
 
 1. Clone this repo
 `git clone <repo-link>`
-## Example: `git clone https://github.com/AlexandruRaulProjects/React-native-audio-player.git`
+### Example: `git clone https://github.com/AlexandruRaulProjects/React-native-audio-player.git`
 
-3. Go to **root project folder** (where you will find the App.js, package-lock.json, package.json, ... files)
+2. Go to **root project folder** (where you will find the App.js, package-lock.json, package.json, ... files)
 `cd <where you cloned this repo in the previous step>`
 
-4. Initialize all the required npm packages
+3. Initialize all the required npm packages
 `npm init`
 
-5. Run it by using any terminal (e.g. PowerShell, CMD, ...)
+4. Run it by using any terminal (e.g. PowerShell, CMD, ...)
 `npm start`
 
-6. Install Expo Go, by scanning the provided QR code from the link sent above, using your phone
+5. Install Expo Go, by scanning the provided QR code from the link sent above, using your phone
 
-7. Scan the QR code from the terminal, where the app is running 
+6. Scan the QR code from the terminal, where the app is running 
 
-8. A `env.js` file which includes Firebase configuration keys, ... 
+7. A `env.js` file which includes Firebase configuration keys, ... 
