@@ -49,7 +49,7 @@ export default function App() {
       <NumberContextProvider>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="AudioForm"
+            initialRouteName="Settings"
             screenOptions={{
               headerShown: false,
               animationEnabled: true, // Enable default animations

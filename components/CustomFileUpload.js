@@ -12,6 +12,8 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth-context";
 
+import { LOCAL_URL_DOMAIN } from "../env";
+
 function CustomFileUpload({
   audio,
   setAudio,
@@ -79,8 +81,8 @@ function CustomFileUpload({
       //   }
       // );
 
-      axios
-        .post("http://192.168.0.104:3005/finalize", {
+      await axios
+        .post(`${LOCAL_URL_DOMAIN}:3005/finalize`, {
           fileDetails: fileDetails,
           settings: settings,
         })

@@ -47,9 +47,9 @@ function Settings() {
   const [selectedVoices, setSelectedVoices] = useState(null);
   const authCtx = useContext(AuthContext);
 
-  const goBackHandler = () => {
-    navigation.goBack();
-  };
+  // const goBackHandler = () => {
+  //   navigation.goBack();
+  // };
 
   const handleSave = async () => {
     const settings = {
@@ -69,7 +69,7 @@ function Settings() {
       authCtx.redefineProfile(settings);
     }
 
-    navigation.goBack();
+    navigation.navigate("Menu");
   };
 
   return (
@@ -126,13 +126,13 @@ function Settings() {
             !selectedVoices
           }
         />
-        <CustomButton
+        {/* <CustomButton
           buttonStyle={styles.back}
           buttonTextStyle={styles.backText}
           buttonText={"Back"}
           iconName={"back"}
           onPress={goBackHandler}
-        />
+        /> */}
       </View>
     </CustomLinearGradient>
   );

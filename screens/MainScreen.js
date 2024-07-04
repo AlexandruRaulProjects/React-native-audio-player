@@ -11,14 +11,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import CustomLinearGradient from "../components/CustomLinearGradient";
 import CustomButton from "../components/CustomButton";
-import { NumberContext } from "../context/number-of-audios-context";
 import { AuthContext } from "../context/auth-context";
 
 const menuItems = [
   {
     iconName: "history",
     title: " History",
-    navigateTo: "Menu",
+    navigateTo: "goBackHandler",
   },
 
   {
